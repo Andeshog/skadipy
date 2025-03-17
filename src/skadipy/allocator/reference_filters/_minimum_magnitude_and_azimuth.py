@@ -67,7 +67,7 @@ class MinimumMagnitudeAndAzimuth(ReferenceFilterBase):
 
         self._xi_desired = None
 
-    def allocate(self, tau: np.ndarray, d_tau: np.ndarray = None) -> typing.Tuple[np.ndarray, np.ndarray]:
+    def allocate(self, tau: np.ndarray, d_tau: np.ndarray = None, xi_p: np.ndarray = None) -> typing.Tuple[np.ndarray, np.ndarray]:
         """
 
         :param tau:
@@ -98,7 +98,8 @@ class MinimumMagnitudeAndAzimuth(ReferenceFilterBase):
             d_tau = self._derivative_solver(tau) / self._t_s
 
         # Compute the particular solution
-        xi_p = self._b_matrix_weighted_inverse @ tau[dof_indices, :]
+        if xi_p is None:
+            xi_p = self._b_matrix_weighted_inverse @ tau[dof_indices, :]
 
         # Compute the derivative of particular solution using derivative of
         # requested force
